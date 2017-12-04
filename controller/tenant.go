@@ -51,6 +51,7 @@ func (c *TenantController) Setup(ctx *app.SetupTenantContext) error {
 		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Missing JWT token"))
 	}
 	ttoken := &TenantToken{token: token}
+	log.Info(ctx, map[string]interface{}{"subject": ttoken.Subject()}, "Setup tenant for user...")
 	exists := c.tenantService.Exists(ttoken.Subject())
 	if exists {
 		return ctx.Conflict()
@@ -60,8 +61,9 @@ func (c *TenantController) Setup(ctx *app.SetupTenantContext) error {
 	if err != nil {
 		log.Error(ctx, map[string]interface{}{
 			"err": err,
-		}, "unable to authenticate user with keycloak")
-		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Could not authorization against keycloak"))
+			// "claims": token.Claims,
+		}, "unable to obtain OpenShift user token")
+		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("unable to obtain OpenShift user token"))
 	}
 
 	openshiftUser, err := c.WhoAmI(token, openshiftUserToken)
@@ -128,8 +130,8 @@ func (c *TenantController) Update(ctx *app.UpdateTenantContext) error {
 	if err != nil {
 		log.Error(ctx, map[string]interface{}{
 			"err": err,
-		}, "unable to authenticate user with keycloak")
-		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Could not authorization against keycloak"))
+		}, "unable to obtain OpenShift user token")
+		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Unable to obtain OpenShift user token"))
 	}
 
 	userConfig := c.openshiftConfig.WithToken(openshiftUserToken)

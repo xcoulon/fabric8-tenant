@@ -46,7 +46,7 @@ func (c *TenantKubeController) KubeConnected(ctx *app.KubeConnectedTenantKubeCon
 		log.Error(ctx, map[string]interface{}{
 			"err": err,
 		}, "unable to authenticate user with keycloak")
-		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Could not authorization against keycloak"))
+		return jsonapi.JSONErrorResponse(ctx, errors.NewUnauthorizedError("Could not authorize against keycloak"))
 	}
 
 	openshiftUser, err := OpenShiftWhoAmI(token, c.openshiftConfig, openshiftUserToken)

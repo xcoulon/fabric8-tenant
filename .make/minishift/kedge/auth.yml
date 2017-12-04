@@ -1,0 +1,22 @@
+name: auth
+containers:
+- image: docker.io/fabric8/fabric8-auth:latest
+  env:
+  - name: AUTH_KEYCLOAK_URL
+    # value: "https://sso.prod-preview.openshift.io"
+    # value: "http://keycloak:8080"
+    value: "http://[[ MINISHIFT_IP ]]:31500"
+  - name: AUTH_WIT_URL
+    value: "http://wit:8080"
+  - name: AUTH_DEVELOPER_MODE_ENABLED
+    value: "true"
+  - name: AUTH_POSTGRES_HOST
+    value: "auth-db"
+  - name: AUTH_POSTGRES_PORT
+    value: "5432"
+services:
+- name: auth
+  type: NodePort
+  ports:
+  - port: 8089
+    nodePort: 31000

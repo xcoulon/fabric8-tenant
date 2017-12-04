@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: f8tenant
+  annotations:
+    fabric8.io/target-platform: "openshift"
+    expose.service-key.config.fabric8.io/keycloak: keycloak.url
+    expose.service-key.config.fabric8.io/wit: wit.url
+    # expose.config.fabric8.io/apiserver-url-key: openshift.tenant.masterurl
+    expose.service-key.config.fabric8.io/fabric8: console.url
+type: Opaque
+data:
+  console.url: http://fabric8
+  keycloak.url: http://keycloak
+  wit.url: http://wit
+  external-docker-registry-external.url: ""
+  openshift.tenant.masterurl: https://kubernetes.default:443
+  openshift.use.current.cluster: true
+  api.server.insecure.skip.tls.verify: true
+  postgres.connection.maxidle: "90"
+  postgres.connection.maxopen: "90"
+  template.domain: d800.free-int.openshiftapps.com
+  template.recommender.external.name: recommender.api.prod-preview.openshift.io
+  keycloak.skip.host.verify: true
+  disable.oso.quotas: true
+  kubernetes.mode: false
+  tenant.exposer: Route
